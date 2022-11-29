@@ -19,7 +19,8 @@ steps:
     displayName: 'Build DapperParameters package'
     inputs:
       command: 'pack'
-      projects: 'Intertech.Facade.DapperParameters/Intertech.Facade.DapperParameters.csproj'
+      projects: 'Intertech.Facade.DapperParameters.csproj'
+      workingDirectory: 'Intertech.Facade.DapperParameters' 
       majorVersion: 2
       minorVersion: 0
       patchVersion: 0
