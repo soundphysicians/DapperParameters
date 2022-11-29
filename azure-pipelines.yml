@@ -37,7 +37,7 @@ steps:
       configuration: "$(buildConfiguration)"
 
   - task: DotNetCoreCLI@2
-    displayName: 'Publish DapperParameters package'
+    displayName: 'Build DapperParameters package'
     inputs:
       command: 'pack'
       packagesToPack: "Intertech.Facade.DapperParameters/Intertech.Facade.DapperParameters.csproj"
@@ -49,3 +49,10 @@ steps:
       feedsToUse: select
       vstsFeed: "$(vstsFeed)"
 
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish DapperParameters package'
+    inputs:
+      command: 'publish'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+      feedsToUse: select
+      vstsFeed: "$(vstsFeed)"
