@@ -5,6 +5,7 @@ pool:
   vmImage: ubuntu-latest
   
 variables:
+  solution: "Intertech.Facade.sln"
   vstsFeed: "0ce57ea6-a919-4143-9994-086d403569af/f2054f25-43cf-4058-9a4d-5a6752bfde25"
   major: '2'
   minor: '0'
@@ -18,15 +19,14 @@ steps:
       packageType: "sdk"
       version: "2.x"
       performMultiLevelLookup: true
-
-  - task: DotNetCoreCLI@2
-    displayName: 'Build solution'
+  
+  - task: VSBuild@1
+    displayName: "Build Solution"
     inputs:
-      command: 'build'
-      projects: '**/*.csproj'
-      configuration: '$(buildConfiguration)'
-      feedsToUse: select
-      vstsFeed: "$(vstsFeed)"
+      solution: "$(solution)"
+      msbuildArgs: '/p:SkipInvalidConfigurations=true /p:DeterministicSourcePaths=false'
+      platform: "Any CPU"
+      configuration: "$(buildConfiguration)"
 
   - task: DotNetCoreCLI@2
     displayName: 'Publish DapperParameters package'
