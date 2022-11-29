@@ -1,0 +1,58 @@
+trigger:
+- master
+
+pool:
+  vmImage: windows-latest
+  
+variables:
+  solution: "Intertech.Facade.sln"
+  vstsFeed: "0ce57ea6-a919-4143-9994-086d403569af/f2054f25-43cf-4058-9a4d-5a6752bfde25"
+  major: '2'
+  minor: '0'
+  patch: '0'
+  buildConfiguration: 'Release'
+
+steps:
+  - task: UseDotNet@2
+    displayName: "Install .NET Core 2.x"
+    inputs:
+      packageType: "sdk"
+      version: "2.x"
+      performMultiLevelLookup: true
+
+  - task: NuGetCommand@2
+    displayName: "Package Restore (NuGet)"
+    inputs:
+      restoreSolution: "$(solution)"
+      feedsToUse: "select"
+      vstsFeed: "$(vstsFeed)"
+      includeNuGetOrg: true
+        
+  - task: VSBuild@1
+    displayName: "Build Solution"
+    inputs:
+      solution: "$(solution)"
+      msbuildArgs: '/p:SkipInvalidConfigurations=true /p:DeterministicSourcePaths=false'
+      platform: "Any CPU"
+      configuration: "$(buildConfiguration)"
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build DapperParameters package'
+    inputs:
+      command: 'pack'
+      packagesToPack: "Intertech.Facade.DapperParameters/Intertech.Facade.DapperParameters.csproj"
+      workingDirectory: "$(System.DefaultWorkingDirectory)"
+      majorVersion: '$(major)'
+      minorVersion: '$(major)'
+      patchVersion: '$(patch)'
+      configuration: '$(buildConfiguration)'
+      feedsToUse: select
+      vstsFeed: "$(vstsFeed)"
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish DapperParameters package'
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+      nuGetFeedType: internal
+      publishVstsFeed: "$(vstsFeed)"
