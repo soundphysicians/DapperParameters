@@ -19,7 +19,15 @@ steps:
       packageType: "sdk"
       version: "2.x"
       performMultiLevelLookup: true
-  
+
+  - task: NuGetCommand@2
+    displayName: "Package Restore (NuGet)"
+    inputs:
+      restoreSolution: "$(solution)"
+      feedsToUse: "select"
+      vstsFeed: "$(vstsFeed)"
+      includeNuGetOrg: true
+        
   - task: VSBuild@1
     displayName: "Build Solution"
     inputs:
