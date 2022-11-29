@@ -6,6 +6,10 @@ pool:
   
 variables:
   vstsFeed: "0ce57ea6-a919-4143-9994-086d403569af/f2054f25-43cf-4058-9a4d-5a6752bfde25"
+  major: '2'
+  minor: '0'
+  patch: '0'
+  buildConfiguration: 'Release'
 
 steps:
   - task: UseDotNet@2
@@ -16,15 +20,24 @@ steps:
       performMultiLevelLookup: true
 
   - task: DotNetCoreCLI@2
-    displayName: 'Build DapperParameters package'
+    displayName: 'Build solution'
+    inputs:
+      command: 'build'
+      projects: '**/*.csproj'
+      configuration: '$(buildConfiguration)'
+      feedsToUse: select
+      vstsFeed: "$(vstsFeed)"
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish DapperParameters package'
     inputs:
       command: 'pack'
       projects: 'Intertech.Facade.DapperParameters.csproj'
       workingDirectory: 'Intertech.Facade.DapperParameters' 
-      majorVersion: 2
-      minorVersion: 0
-      patchVersion: 0
-      configuration: "Release"
+      majorVersion: '$(major)'
+      minorVersion: '$(major)'
+      patchVersion: '$(patch)'
+      configuration: '$(buildConfiguration)'
       feedsToUse: select
       vstsFeed: "$(vstsFeed)"
 
