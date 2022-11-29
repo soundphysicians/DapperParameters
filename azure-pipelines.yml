@@ -1,0 +1,29 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+  
+variables:
+  vstsFeed: "0ce57ea6-a919-4143-9994-086d403569af/f2054f25-43cf-4058-9a4d-5a6752bfde25"
+
+steps:
+  - task: UseDotNet@2
+    displayName: "Install .NET Core 2.x"
+    inputs:
+      packageType: "sdk"
+      version: "2.x"
+      performMultiLevelLookup: true
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build DapperParameters package'
+    inputs:
+      command: 'pack'
+      projects: 'Intertech.Facade.DapperParameters/Intertech.Facade.DapperParameters.csproj'
+      majorVersion: 2
+      minorVersion: 0
+      patchVersion: 0
+      configuration: "Release"
+      feedsToUse: select
+      vstsFeed: "$(vstsFeed)"
+
