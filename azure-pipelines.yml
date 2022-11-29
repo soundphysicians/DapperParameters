@@ -52,7 +52,7 @@ steps:
   - task: DotNetCoreCLI@2
     displayName: 'Publish DapperParameters package'
     inputs:
-      command: 'publish'
+      command: 'push'
       packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-      feedsToUse: select
-      vstsFeed: "$(vstsFeed)"
+      nuGetFeedType: internal
+      publishVstsFeed: "$(vstsFeed)"
