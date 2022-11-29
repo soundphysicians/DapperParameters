@@ -40,7 +40,7 @@ steps:
     displayName: 'Publish DapperParameters package'
     inputs:
       command: 'pack'
-      projects: "Intertech.Facade.DapperParameters/Intertech.Facade.DapperParameters.csproj"
+      packagesToPack: "Intertech.Facade.DapperParameters/Intertech.Facade.DapperParameters.csproj"
       workingDirectory: "$(System.DefaultWorkingDirectory)"
       majorVersion: '$(major)'
       minorVersion: '$(major)'
